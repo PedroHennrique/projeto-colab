@@ -126,6 +126,96 @@
         </div>
     </div>
 
+    <main>
+        <h1 style="text-align:center; color: rgb(255, 255, 255); margin-bottom: 20px;">CARRINHO</h1>
+
+        <div class="carrinho-container" id="carrinhoContainer"></div>
+
+        <button class="btnContinuar" id="btnContinuar">Continuar Comprando</button>
+        <p class="total" id="valorTotal">Total: R$ 0,00</p>
+        <button class="btnFinalizar" id="btnFinalizar">Finalizar Compra</button>
+    </main>
+
+    <script>
+        const carrinhoContainer = document.getElementById('carrinhoContainer');
+        let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+
+        function atualizarCarrinho() {
+            carrinhoContainer.innerHTML = '';
+            let total = 0;
+
+            if (carrinho.length === 0) {
+                carrinhoContainer.innerHTML = '<p style="text-align:center;">Seu carrinho está vazio.</p>';
+            } else {
+                carrinho.forEach((item, index) => {
+                    total += item.preco * item.quantidade;
+
+                    const div = document.createElement('div');
+                    div.classList.add('carrinho-item');
+                    div.innerHTML = `
+                    <img src="${item.imagem}" alt="${item.nome}">
+                    <div class="item-info">
+                        <p><strong>${item.nome}</strong></p>
+                        <p>R$ ${item.preco.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                        <div class="quantidade">
+                            <button class="btnMenos">-</button>
+                            <span>${item.quantidade}</span>
+                            <button class="btnMais">+</button>
+                        </div>
+                    </div>
+                    <button class="btnRemover">Remover</button>
+                `;
+                    carrinhoContainer.appendChild(div);
+
+                    // Remover produto
+                    div.querySelector('.btnRemover').addEventListener('click', () => {
+                        carrinho.splice(index, 1);
+                        localStorage.setItem('carrinho', JSON.stringify(carrinho));
+                        atualizarCarrinho();
+                        atualizarQtdCarrinho(); //  atualiza número do cabeçalho
+                    });
+
+                    // Aumentar quantidade
+                    div.querySelector('.btnMais').addEventListener('click', () => {
+                        item.quantidade += 1;
+                        localStorage.setItem('carrinho', JSON.stringify(carrinho));
+                        atualizarCarrinho();
+                        atualizarQtdCarrinho(); //  atualiza número do cabeçalho
+                    });
+
+                    // Diminuir quantidade
+                    div.querySelector('.btnMenos').addEventListener('click', () => {
+                        if (item.quantidade > 1) {
+                            item.quantidade -= 1;
+                        } else {
+                            carrinho.splice(index, 1);
+                        }
+                        localStorage.setItem('carrinho', JSON.stringify(carrinho));
+                        atualizarCarrinho();
+                        atualizarQtdCarrinho(); //  atualiza número do cabeçalho
+                    });
+                });
+            }
+            document.getElementById('valorTotal').innerText = 'Total: R$ ' + total.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        atualizarCarrinho();
+
+        // Continuar comprando
+        document.getElementById('btnContinuar').addEventListener('click', () => {
+            window.location.href = 'produto.html';
+        });
+
+        // Finalizar compra
+        document.getElementById('btnFinalizar').addEventListener('click', () => {
+            if (carrinho.length === 0) {
+                alert('Seu carrinho está vazio!');
+            } else {
+                window.location.href = 'checkout.html';
+            }
+        });
+    </script>
+
     <script src="../js/script.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>

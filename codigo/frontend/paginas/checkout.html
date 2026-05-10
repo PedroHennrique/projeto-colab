@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html>
 
 <head>
@@ -125,6 +125,117 @@
             </form>
         </div>
     </div>
+
+    <main>
+    <h1>FINALIZAR COMPRAR</h1>
+
+    <!-- Cabeçalho da Nota Fiscal -->
+    <h3 id="notaFiscalNome" style="text-align:center; margin-bottom:20px;">Nota Fiscal - Cliente: (não logado)</h3>
+
+    <div id="resumo"></div>
+    <p class="total" id="valorTotal">Total: R$ 0,00</p>
+
+    <h2 style="text-align:center; margin-top:20px;">Pagamento via Pix</h2>
+
+    <!-- Container centralizado do QR Code -->
+    <div id="qrcode-container"
+      style="display: flex; flex-direction: column; justify-content: center; align-items: center; margin-top: 20px;">
+
+      <!-- QR Code com borda e sombra -->
+      <div id="qrcode"
+        style="padding: 15px; background: white; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.15);">
+      </div>
+
+      <!-- Mensagem explicativa abaixo do QR Code -->
+      <p style="margin-top: 15px; font-size: 16px; color: #ffffff; text-align: center;font-weight: bold;;">
+        Aponte a câmera do seu celular para o QR Code para realizar o pagamento via Pix.
+      </p>
+    </div>
+
+    <button class="btnVoltar" onclick="window.location.href='produto.html'">
+      Continuar Comprando
+    </button>
+  </main>
+
+  <!-- Biblioteca para QR Code -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
+  <!-- ===================== SCRIPT PRINCIPAL ===================== -->
+  <script>
+    /* ----------------------------------------------------------
+       EXIBE O NOME DO USUÁRIO LOGADO NO CABEÇALHO E NA NOTA
+    ----------------------------------------------------------- */
+    function pegarNomeUsuarioDoStorage() {
+      const raw = localStorage.getItem('usuarioLogado');
+      if (!raw) return null;
+
+      try {
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === 'object') {
+          return parsed.nome || parsed.username || parsed.nomeUsuario || null;
+        }
+        return parsed;
+      } catch (err) {
+        return raw;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const nome = pegarNomeUsuarioDoStorage();
+      const nomeUsuarioSpan = document.getElementById('nomeUsuario');
+      const blocoUsuario = document.querySelector('.usuarioLogado');
+      const botaoLogin = document.querySelector('.btnLogin');
+      const notaNome = document.getElementById('notaFiscalNome');
+
+      if (nome) {
+        if (nomeUsuarioSpan) nomeUsuarioSpan.textContent = nome;
+        if (blocoUsuario) blocoUsuario.style.display = 'flex';
+        if (botaoLogin) botaoLogin.style.display = 'none';
+        if (notaNome) notaNome.textContent = `Cliente: ${nome}`;
+      }
+    });
+
+    /* ----------------------------------------------------------
+       MONTA O RESUMO DO CARRINHO E GERA O QR CODE PIX
+    ----------------------------------------------------------- */
+    const resumo = document.getElementById('resumo');
+    const valorTotal = document.getElementById('valorTotal');
+    const carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+
+    let total = 0;
+    if (carrinho.length === 0) {
+      resumo.innerHTML = "<p>Seu carrinho está vazio.</p>";
+    } else {
+      carrinho.forEach(item => {
+        const linha = document.createElement('div');
+        linha.classList.add('item');
+        linha.innerHTML = `
+          <img src="${item.imagem}" alt="${item.nome}">
+          <div class="item-info">
+            <span>${item.nome}</span>
+            <span>Quantidade: ${item.quantidade} unidade${item.quantidade > 1 ? 's' : ''}</span>
+          </div>
+          <span>R$ ${(item.preco * item.quantidade).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+        `;
+        resumo.appendChild(linha);
+        total += item.preco * item.quantidade;
+      });
+    }
+
+    valorTotal.innerText = "Total: R$ " + total.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+
+    // --- Gerar QR Code Pix ---
+    const chavePix = "seuemail@provedor.com"; // troque pela sua chave Pix real
+    const nomeRecebedor = "Mettalon LTDA";
+
+    const payloadPix = `00020126580014BR.GOV.BCB.PIX0114${chavePix}520400005303986540${total.toFixed(2)}5802BR5913${nomeRecebedor}6009Sao Paulo62070503***6304`;
+
+    new QRCode(document.getElementById("qrcode"), {
+      text: payloadPix,
+      width: 200,
+      height: 200
+    });
+  </script>
 
     <script src="../js/script.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>

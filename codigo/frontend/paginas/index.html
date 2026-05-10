@@ -15,8 +15,18 @@
             <a href="sobre.html">Sobre</a>
             <a href="produto.html">Produtos</a>
             <a href="contatos.html">Contatos</a>
+            <a href="carrinho.html" class="btnCarrinho">
+                <ion-icon name="cart-outline"></ion-icon>
+                <span id="qtdCarrinho">0</span>
+            </a>
             <button class="btnLogin">Login</button>
-        </nav>  
+        </nav>
+
+        <div class="usuarioLogado" style="display: none;">
+            <ion-icon name="person-circle-outline" class="iconeUsuario"></ion-icon>
+            <span id="nomeUsuario"></span>
+            <button class="btnUsuario" onclick="logout()">Sair</button>
+        </div>
     </header>
 
     <div class="sobressair">
@@ -84,7 +94,7 @@
             </form>
         </div>
 
-        <!-- Formulário de Alteração -->
+        <!-- Formulário de Verificação de Senha -->
         <div class="formsAlteracao"> 
             <h2>Verificar Dados</h2>
             <form action="#">
