@@ -15,11 +15,23 @@
             <a href="sobre.html">Sobre</a>
             <a href="produto.html">Produtos</a>
             <a href="contatos.html">Contatos</a>
+            <a href="carrinho.html" class="btnCarrinho">
+                <ion-icon name="cart-outline"></ion-icon>
+                <span id="qtdCarrinho">0</span>
+            </a>
             <button class="btnLogin">Login</button>
-        </nav>  
+        </nav>
+
+        <div class="usuarioLogado" style="display: none;">
+            <ion-icon name="person-circle-outline" class="iconeUsuario"></ion-icon>
+            <span id="nomeUsuario"></span>
+            <button class="btnUsuario" onclick="logout()">Sair</button>
+        </div>
     </header>
 
     <div class="sobressair">
+        <!-- X do site -->
+        <span class="fechar"><ion-icon name="close"></ion-icon></span>
         <!-- Formulário de Login -->
         <div class="formsLogin">
             <h2>Login</h2>
@@ -35,6 +47,12 @@
                     <input type="password" required>
                     <label>Password</label>
                 </div>
+                <!-- Botão de esqueci senha -->
+                <div class="esqueciSenha">
+                    <label><input type="checkbox">Remember me</label>
+                    <a href="#" class="alterar">Forgot Password</a>
+                </div>
+
                 <!-- Botão de Logar -->
                 <button type="submit" class="btn">Login</button> 
                 <!-- Botão de Registrar -->
@@ -76,7 +94,7 @@
             </form>
         </div>
 
-        <!-- Formulário de Alteração -->
+        <!-- Formulário de Verificação de Senha -->
         <div class="formsAlteracao"> 
             <h2>Verificar Dados</h2>
             <form action="#">
@@ -106,5 +124,10 @@
                 </div>
             </form>
         </div>
-        
+    </div>
+
+    <script src="../js/script.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>
+</html>
