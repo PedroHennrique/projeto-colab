@@ -184,3 +184,177 @@ header {
     height: 450px;
     width: 380px;
 }
+
+/* layout dos cards da tela de produtos */
+.produtos-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 40px;
+}
+
+/* card  */
+.card {
+    width: 250px;
+    background: white;
+    border-radius: 15px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    transition: 0.3s;
+}
+
+/* animação cards da tela de produtos */
+.card:hover {
+    transform: scale(1.05);
+}
+
+/* imagem  cards da tela de produtos*/
+.card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* botão comprar cards da tela de produtos */
+.btnComprar {
+    margin-top: 10px;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    background: #3c84ce;
+    color: white;
+    cursor: pointer;
+}
+
+.btnComprar:hover {
+    background: #2d6fb0;
+}
+
+
+/* container do carrinho */
+.carrinho-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 80%;
+    margin: 30px auto;
+}
+
+/* card do carrinho */
+.carrinho-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: white;
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* imagem do produto card tela carrinho */
+.carrinho-item img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* infos card tela carrinho */
+.item-info {
+    flex: 1;
+    margin-left: 20px;
+    color: #162938;
+}
+
+/* quantidade card tela carrinho */
+.quantidade {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+/* botões + e - card tela carrinho*/
+.quantidade button {
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background: #3c84ce;
+    color: white;
+    font-size: 18px;
+}
+
+/* remover card tela carrinho */
+.btnRemover {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    background: crimson;
+    color: white;
+    cursor: pointer;
+}
+
+.btnRemover:hover {
+    background: darkred;
+}
+
+/* layout dos botoes da tela carrinho */
+.btnContinuar,
+.btnFinalizar {
+    display: block;
+    margin: 10px auto;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+}
+
+.btnContinuar {
+    background-color: #000000;
+    color: rgb(255, 255, 255);
+    box-shadow: 0 2px 4px #ff0000;
+}
+
+.btnFinalizar {
+    background-color: #000000;
+    color: white;
+    box-shadow: 0 2px 4px #ff0000;
+}
+
+.btnComprar,
+.btnRemover,
+.btnContinuar,
+.btnFinalizar {
+    position: relative;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* efeito da frase total na tela carrinho */
+.total {
+    display: block;
+    width: 220px;
+
+    margin: 15px auto;
+    padding: 10px 20px;
+
+    background-color: #000000;
+    color: #ffffff;
+
+    border-radius: 5px;
+    border: none;
+
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+
+    box-shadow: 0 2px 4px #ff0000;
+}
