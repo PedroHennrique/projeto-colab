@@ -8,3 +8,13 @@ CREATE TABLE usuarios (
     email VARCHAR(100) NOT NULL, 
     password VARCHAR(100) NOT NULL 
 );
+
+ALTER TABLE usuarios
+ADD tipo VARCHAR(20) NOT NULL DEFAULT 'cliente';
+
+CREATE TABLE produtos(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100),
+    preco DECIMAL(10,2),
+    imagem TEXT
+);

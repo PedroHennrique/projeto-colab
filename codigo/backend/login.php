@@ -16,14 +16,15 @@ $email = $data['email'];
 $pass = $data['password'];
 
 // Consulta
-$sql = "SELECT username FROM usuarios WHERE email='$email' AND password='$pass'";
+$sql = "SELECT username, tipo FROM usuarios WHERE email='$email' AND password='$pass'";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     echo json_encode([
         "status" => "success",
-        "username" => $row['username']
+        "username" => $row['username'],
+        "tipo" => $row['tipo']
     ]);
 } else {
     http_response_code(401);
