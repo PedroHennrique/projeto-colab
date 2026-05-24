@@ -51,11 +51,12 @@ registerForm.addEventListener('submit', (e) => {
     const username = registerForm.querySelector('input[type="text"]').value;
     const email = registerForm.querySelector('input[type="email"]').value;
     const password = registerForm.querySelector('input[type="password"]').value;
+    const tipo = document.getElementById('tipoUsuario').value;
 
     fetch('../../backend/registro.php', {
         method: 'POST', 
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, email, password })
+        body: JSON.stringify({ username, email, password, tipo })
     })
     .then(res => res.text())
     .then(data => alert(data))
@@ -80,6 +81,7 @@ loginForm.addEventListener('submit', (e) => {
         if (data.status === "success") {
             // Salva no localStorage
             localStorage.setItem('usuarioLogado', data.username);
+            localStorage.setItem('tipoUsuario', data.tipo);
 
             // Atualiza interface
             mostrarUsuarioLogado();
@@ -93,18 +95,76 @@ loginForm.addEventListener('submit', (e) => {
     .catch(err => alert('Erro: ' + err));
 });
 
+// Recuperar senha
+const recuperarForm = document.querySelector('.formsAlteracao form');
+
+recuperarForm.addEventListener('submit', (e) => {    e.preventDefault();
+    const username = recuperarForm.querySelector('input[type="text"]').value;
+    const email = recuperarForm.querySelector('input[type="email"]').value;
+
+    fetch('../../backend/recuperar_senha.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            username,
+            email
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        const mensagem = document.querySelector('.mensagem-recuperacao');
+        mensagem.style.display = 'block';
+        if(data.status === "success") {
+            mensagem.innerHTML = `
+                <p style="color: lightgreen;">
+                    Sua senha é: <strong>${data.password}</strong>
+                </p>
+            `;
+        } else {
+            mensagem.innerHTML = `
+                <p style="color: red;">
+                    ${data.message}
+                </p>
+            `;
+        }
+    })
+    .catch(err => {
+        alert("Erro ao recuperar senha");
+        console.log(err);
+    });
+});
+
 // Log-out
 function logout() {
     localStorage.removeItem('usuarioLogado');
+    localStorage.removeItem('tipoUsuario');
     location.reload();
 }
 
 function mostrarUsuarioLogado() {
     const usuario = localStorage.getItem('usuarioLogado');
+    const tipo = localStorage.getItem('tipoUsuario');
+    const btnLogin = document.querySelector('.btnLogin');
+    const usuarioLogado = document.querySelector('.usuarioLogado');
+    const btnVendedor = document.querySelector('.btnVendedor');
+
+    // Esconde botão vendedor inicialmente
+    if(btnVendedor){
+        btnVendedor.style.display = 'none';
+    }
     if (usuario) {
-        document.querySelector('.btnLogin').style.display = 'none';
-        document.querySelector('.usuarioLogado').style.display = 'flex';
+        btnLogin.style.display = 'none';
+        usuarioLogado.style.display = 'flex';
         document.getElementById('nomeUsuario').textContent = usuario;
+
+        // MOSTRA SOMENTE SE FOR VENDEDOR
+        if (tipo === 'vendedor') {
+            if(btnVendedor){
+                btnVendedor.style.display = 'inline-block';
+            }
+        }
     }
 }
 
@@ -199,3 +259,64 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+
+// ---------------- PRODUTOS DINÂMICOS ----------------
+
+async function carregarProdutos() {
+
+    const container = document.getElementById('produtosContainer');
+
+    // evita erro em páginas sem container
+    if (!container) return;
+
+    try {
+
+        const resposta = await fetch('../../backend/buscar_produtos.php');
+
+        const produtos = await resposta.json();
+
+        container.innerHTML = '';
+
+        produtos.forEach(produto => {
+
+            container.innerHTML += `
+
+                <div class="card">
+
+                    <img src="${produto.imagem}" alt="${produto.nome}">
+
+                    <h3>${produto.nome}</h3>
+
+                    <p>
+                        Produto disponível na loja
+                    </p>
+
+                    <br>
+
+                    <p>
+                        Preço: R$ ${produto.preco}
+                    </p>
+
+                    <button 
+                        class="btnComprar"
+                        data-nome="${produto.nome}"
+                        data-preco="${produto.preco}"
+                        onclick="adicionarCarrinho(this)"
+                    >
+                        Comprar
+                    </button>
+
+                </div>
+
+            `;
+        });
+
+    } catch (erro) {
+
+        console.log("Erro ao carregar produtos");
+
+    }
+
+}
+
+window.addEventListener('load', carregarProdutos);

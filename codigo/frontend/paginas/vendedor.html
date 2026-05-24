@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Painel do Vendedor</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<h1>Painel do Vendedor</h1>
+
+<form id="formProduto">
+
+    <input type="text" id="nome" placeholder="Nome do produto" required>
+
+    <input type="number" id="preco" placeholder="Preço" required>
+
+    <input type="text" id="imagem" placeholder="Imagem URL" required>
+
+    <button type="submit">
+        Adicionar Produto
+    </button>
+
+</form>
+
+<script>
+
+const form = document.getElementById('formProduto');
+
+form.addEventListener('submit', async (e)=>{
+
+    e.preventDefault();
+
+    const nome = document.getElementById('nome').value;
+    const preco = document.getElementById('preco').value;
+    const imagem = document.getElementById('imagem').value;
+
+    const resposta = await fetch('../../backend/adicionar_produto.php',{
+
+        method:'POST',
+
+        headers:{
+            'Content-Type':'application/json'
+        },
+
+        body: JSON.stringify({
+            nome,
+            preco,
+            imagem
+        })
+
+    });
+
+    const dados = await resposta.text();
+
+    alert(dados);
+
+});
+
+</script>
+
+</body>
+</html>
