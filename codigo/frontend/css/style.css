@@ -358,3 +358,107 @@ header {
 
     box-shadow: 0 2px 4px #ff0000;
 }
+
+/* ========================= */
+/* ÁREA DOS FILTROS */
+/* ========================= */
+
+.areaFiltros{
+    width: 100%;
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ========================= */
+/* PESQUISA */
+/* ========================= */
+
+.barraPesquisa{
+    width: 70%;
+    max-width: 700px;
+    height: 55px;
+
+    background: white;
+
+    border-radius: 40px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 20px;
+
+    margin-bottom: 40px;
+}
+
+.barraPesquisa ion-icon{
+    font-size: 24px;
+    color: #555;
+    margin-right: 10px;
+}
+
+.barraPesquisa input{
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 17px;
+}
+
+/* ========================= */
+/* GÊNEROS */
+/* ========================= */
+
+.containerGeneros{
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+
+    flex-wrap: wrap;
+}
+
+.cardGenero{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+.cardGenero:hover{
+    transform: scale(1.08);
+}
+
+.circuloGenero{
+    width: 140px;
+    height: 140px;
+
+    border-radius: 50%;
+
+    overflow: hidden;
+
+    border: 4px solid white;
+
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+}
+
+.circuloGenero img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.cardGenero p{
+    margin-top: 12px;
+
+    color: white;
+
+    font-size: 18px;
+
+    font-weight: bold;
+}
