@@ -260,63 +260,119 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-// ---------------- PRODUTOS DINÂMICOS ----------------
 
+// ---------------- PRODUTOS + PESQUISA ----------------
+
+// VARIÁVEIS GLOBAIS
+let produtosGlobais = [];
+let termoPesquisa = "";
+
+// ---------------- ELEMENTOS GLOBAIS ----------------
+let containerGeneros;
+let tituloGeneros;
+
+// ---------------- INICIALIZAÇÃO ----------------
+window.addEventListener("DOMContentLoaded", () => {
+
+    const inputPesquisa = document.getElementById("pesquisa");
+
+    // 🔥 PEGAR ELEMENTOS DOS GÊNEROS (IMPORTANTE)
+    containerGeneros = document.querySelector('.containerGeneros');
+    tituloGeneros = document.querySelector('section.areaFiltros h1');
+
+    // evento da pesquisa
+    if (inputPesquisa) {
+        inputPesquisa.addEventListener("input", (e) => {
+
+            termoPesquisa = e.target.value.toLowerCase().trim();
+
+            // 🔥 AQUI FAZ OS GÊNEROS SUMIREM
+            if (termoPesquisa.length > 0) {
+
+                if (containerGeneros) containerGeneros.style.display = "none";
+                if (tituloGeneros) tituloGeneros.style.display = "none";
+
+            } else {
+
+                if (containerGeneros) containerGeneros.style.display = "flex";
+                if (tituloGeneros) tituloGeneros.style.display = "block";
+            }
+
+            renderizarProdutos();
+        });
+    }
+
+    carregarProdutos();
+});
+
+// ---------------- CARREGAR PRODUTOS ----------------
 async function carregarProdutos() {
 
     const container = document.getElementById('produtosContainer');
-
-    // evita erro em páginas sem container
     if (!container) return;
 
     try {
 
         const resposta = await fetch('../../backend/buscar_produtos.php');
+        produtosGlobais = await resposta.json();
 
-        const produtos = await resposta.json();
-
-        container.innerHTML = '';
-
-        produtos.forEach(produto => {
-
-            container.innerHTML += `
-
-                <div class="card">
-
-                    <img src="${produto.imagem}" alt="${produto.nome}">
-
-                    <h3>${produto.nome}</h3>
-
-                    <p>
-                        Produto disponível na loja
-                    </p>
-
-                    <br>
-
-                    <p>
-                        Preço: R$ ${produto.preco}
-                    </p>
-
-                    <button 
-                        class="btnComprar"
-                        data-nome="${produto.nome}"
-                        data-preco="${produto.preco}"
-                        onclick="adicionarCarrinho(this)"
-                    >
-                        Comprar
-                    </button>
-
-                </div>
-
-            `;
-        });
+        renderizarProdutos();
 
     } catch (erro) {
-
-        console.log("Erro ao carregar produtos");
-
+        console.log("Erro ao carregar produtos", erro);
     }
-
 }
 
-window.addEventListener('load', carregarProdutos);
+// ---------------- RENDERIZAR ----------------
+function renderizarProdutos() {
+
+    const container = document.getElementById('produtosContainer');
+    if (!container) return;
+
+    let lista = [...produtosGlobais];
+
+    // FILTRO CATEGORIA
+    const categoria = new URLSearchParams(window.location.search).get('categoria');
+
+    if (categoria) {
+        lista = lista.filter(produto =>
+            produto.categoria?.trim().toLowerCase() === categoria.trim().toLowerCase()
+        );
+    }
+
+    // FILTRO PESQUISA
+    if (termoPesquisa !== "") {
+        lista = lista.filter(produto =>
+            produto.nome?.toLowerCase().includes(termoPesquisa)
+        );
+    }
+
+    // RENDER
+    container.innerHTML = "";
+
+    lista.forEach(produto => {
+
+        container.innerHTML += `
+            <div class="card">
+
+                <img src="${produto.imagem}" alt="${produto.nome}">
+
+                <h3>${produto.nome}</h3>
+
+                <p>Produto disponível na loja</p>
+
+                <p>Preço: R$ ${produto.preco}</p>
+
+                <button 
+                    class="btnComprar"
+                    data-nome="${produto.nome}"
+                    data-preco="${produto.preco}"
+                    onclick="adicionarCarrinho(this)"
+                >
+                    Comprar
+                </button>
+
+            </div>
+        `;
+    });
+}

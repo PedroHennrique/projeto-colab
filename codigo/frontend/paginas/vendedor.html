@@ -17,6 +17,20 @@
 
     <input type="text" id="imagem" placeholder="Imagem URL" required>
 
+    <select id="categoria" required>
+
+    <option value="">Selecione a categoria</option>
+
+    <option value="Moda">Moda</option>
+
+    <option value="Eletrônicos">Eletrônicos</option>
+
+    <option value="Esportes">Esportes</option>
+
+    <option value="Acessórios">Acessórios</option>
+
+</select>
+
     <button type="submit">
         Adicionar Produto
     </button>
@@ -34,6 +48,7 @@ form.addEventListener('submit', async (e)=>{
     const nome = document.getElementById('nome').value;
     const preco = document.getElementById('preco').value;
     const imagem = document.getElementById('imagem').value;
+    const categoria = document.getElementById('categoria').value;
 
     const resposta = await fetch('../../backend/adicionar_produto.php',{
 
@@ -46,7 +61,9 @@ form.addEventListener('submit', async (e)=>{
         body: JSON.stringify({
             nome,
             preco,
-            imagem
+           imagem,
+            categoria
+
         })
 
     });
