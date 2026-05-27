@@ -19,6 +19,7 @@
                 <ion-icon name="cart-outline"></ion-icon>
                 <span id="qtdCarrinho">0</span>
             </a>
+            <a href="vendedor.html" class="btnVendedor" style="display:none;">Painel Vendedor</a>
             <button class="btnLogin">Login</button>
         </nav>
 
@@ -81,6 +82,14 @@
                     <span class="icone"><ion-icon name="lock-closed"></ion-icon></span>
                     <input type="password" required>
                     <label>Password</label>
+                </div>
+
+                <div class="input-box">
+                    <select id="tipoUsuario" required>
+                        <option value="">Selecione o tipo</option>
+                        <option value="cliente">Cliente</option>
+                        <option value="vendedor">Vendedor</option>
+                    </select>
                 </div>
 
                 <div class="termosCondicoes">
