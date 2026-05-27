@@ -172,22 +172,33 @@ function mostrarUsuarioLogado() {
 window.onload = mostrarUsuarioLogado;
 
 // ------------------- CARRINHO -------------------
-// Função que será chamada pelo onclick dos botões "Comprar"
+// ------------------- CARRINHO -------------------
+
+// Função chamada pelo botão Comprar
 function adicionarCarrinho(botao) {
     const nome = botao.getAttribute('data-nome');
     const preco = parseFloat(botao.getAttribute('data-preco'));
-    const imagem = botao.parentElement.querySelector('img').src; // pega o caminho da imagem do card
+    const imagem = botao.parentElement.querySelector('img').src;
 
     let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
 
     const produtoExistente = carrinho.find(item => item.nome === nome);
-    if(produtoExistente){
+
+    if (produtoExistente) {
         produtoExistente.quantidade += 1;
     } else {
-        carrinho.push({nome, preco, quantidade: 1, imagem}); // adiciona imagem ao objeto
+        carrinho.push({
+            nome,
+            preco,
+            quantidade: 1,
+            imagem
+        });
     }
 
     localStorage.setItem('carrinho', JSON.stringify(carrinho));
+
+    // Atualiza contador do carrinho
+    atualizarQtdCarrinho();
 
     alert(`${nome} adicionado ao carrinho!`);
 
@@ -195,9 +206,10 @@ function adicionarCarrinho(botao) {
     window.location.href = 'carrinho.html';
 }
 
-//  Atualizar quantidade do carrinho 
+// Atualizar quantidade do carrinho
 function atualizarQtdCarrinho() {
     const carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+
     let total = 0;
 
     carrinho.forEach(item => {
@@ -205,31 +217,14 @@ function atualizarQtdCarrinho() {
     });
 
     const spanQtd = document.getElementById('qtdCarrinho');
-    if (spanQtd) spanQtd.textContent = total;
-}
 
-// Atualiza o número do carrinho sempre que a página carrega
-window.addEventListener('load', atualizarQtdCarrinho);
-
-// Atualiza também quando adiciona um item
-function adicionarCarrinho(botao) {
-    const nome = botao.getAttribute('data-nome');
-    const preco = parseFloat(botao.getAttribute('data-preco'));
-    const imagem = botao.parentElement.querySelector('img').src;
-
-    let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
-    const produtoExistente = carrinho.find(item => item.nome === nome);
-
-    if (produtoExistente) {
-        produtoExistente.quantidade += 1;
-    } else {
-        carrinho.push({ nome, preco, quantidade: 1, imagem });
+    if (spanQtd) {
+        spanQtd.textContent = total;
     }
-
-    localStorage.setItem('carrinho', JSON.stringify(carrinho));
-    atualizarQtdCarrinho(); // 🔥 Atualiza o contador imediatamente
 }
 
+// Atualiza o número do carrinho quando a página carrega
+window.addEventListener('load', atualizarQtdCarrinho);
 // --- FINALIZAR COMPRA ---
 // Essa função verifica se o usuário está logado antes de ir para o checkout
 document.addEventListener("DOMContentLoaded", () => {
@@ -347,32 +342,336 @@ function renderizarProdutos() {
         );
     }
 
-    // RENDER
-    container.innerHTML = "";
+    // AVALIAÇÃO 
+    
+   // PERCORRE TODOS OS PRODUTOS
+   
+lista.forEach(produto => {
 
-    lista.forEach(produto => {
+    // CRIA O CARD DO PRODUTO
+    container.innerHTML += `
 
-        container.innerHTML += `
-            <div class="card">
+        <div class="card">
 
-                <img src="${produto.imagem}" alt="${produto.nome}">
+            <!-- IMAGEM -->
+            <img src="${produto.imagem}" alt="${produto.nome}">
 
-                <h3>${produto.nome}</h3>
+            <!-- NOME -->
+            <h3>${produto.nome}</h3>
 
-                <p>Produto disponível na loja</p>
+            <!-- DESCRIÇÃO -->
+            <p>Produto disponível na loja</p>
 
-                <p>Preço: R$ ${produto.preco}</p>
+            <!-- PREÇO -->
+            <p>Preço: R$ ${produto.preco}</p>
 
+            <!-- ========================= -->
+            <!-- ÁREA DE AVALIAÇÃO -->
+            <!-- ========================= -->
+
+            <div class="avaliacao">
+
+                <!-- SELECT DAS ESTRELAS -->
+                <select class="nota">
+
+                    <option value="5">⭐⭐⭐⭐⭐</option>
+                    <option value="4">⭐⭐⭐⭐</option>
+                    <option value="3">⭐⭐⭐</option>
+                    <option value="2">⭐⭐</option>
+                    <option value="1">⭐</option>
+
+                </select>
+
+                <!-- CAMPO DE COMENTÁRIO -->
+                <textarea 
+                    class="comentario"
+                    placeholder="Digite seu comentário"
+                ></textarea>
+
+                <!-- BOTÃO ENVIAR -->
                 <button 
-                    class="btnComprar"
-                    data-nome="${produto.nome}"
-                    data-preco="${produto.preco}"
-                    onclick="adicionarCarrinho(this)"
+                    class="btnAvaliar"
+
+                    onclick="enviarAvaliacao(${produto.id}, this)"
                 >
-                    Comprar
+
+                    Avaliar Produto
+
                 </button>
 
+                <!-- LOCAL ONDE AS AVALIAÇÕES VÃO APARECER -->
+                <!-- BOTÃO MOSTRAR AVALIAÇÕES -->
+                <button
+                    class="btnMostrarAvaliacoes"
+
+                    onclick="toggleAvaliacoes(${produto.id})"
+                >
+
+                    Mostrar Avaliações
+
+                </button>
+
+                <!-- ÁREA OCULTA -->
+                <div
+
+                    class="listaAvaliacoes oculto"
+
+                    id="avaliacoes-${produto.id}"
+                >
+                </div>
+
             </div>
-        `;
-    });
+
+            <!-- BOTÃO COMPRAR -->
+            <button 
+
+                class="btnComprar"
+
+                data-nome="${produto.nome}"
+
+                data-preco="${produto.preco}"
+
+                onclick="adicionarCarrinho(this)"
+            >
+
+                Comprar
+
+            </button>
+
+        </div>
+    `;
+
+    // CARREGA AS AVALIAÇÕES AUTOMATICAMENTE
+    setTimeout(() => {
+
+        carregarAvaliacoes(produto.id);
+
+    }, 100);
+
+});
+}
+// ========================================
+// ENVIAR AVALIAÇÃO
+// ========================================
+
+async function enviarAvaliacao(produtoId, botao){
+
+    // PEGA O CARD
+    const card = botao.parentElement;
+
+    // PEGA A NOTA
+    const nota = card.querySelector('.nota').value;
+
+    // PEGA O COMENTÁRIO
+    const comentario = card.querySelector('.comentario').value;
+
+    // PEGA O USUÁRIO LOGADO
+    const usuario = localStorage.getItem('usuarioLogado');
+
+    // VERIFICA LOGIN
+    if(!usuario){
+
+        alert("Você precisa estar logado!");
+
+        return;
+    }
+
+    try{
+
+        // ENVIA PARA O PHP
+        const resposta = await fetch(
+
+            '../../backend/salvar_avaliacao.php',
+
+            {
+
+                method: 'POST',
+
+                headers: {
+
+                    'Content-Type': 'application/json'
+                },
+
+                body: JSON.stringify({
+
+                    produto_id: produtoId,
+
+                    usuario: usuario,
+
+                    nota: nota,
+
+                    comentario: comentario
+
+                })
+
+            }
+        );
+
+        // PEGA RESPOSTA
+        const dados = await resposta.json();
+
+        // ALERTA
+        alert(dados.message);
+
+        // LIMPA CAMPO
+        card.querySelector('.comentario').value = "";
+
+        // RECARREGA
+        carregarAvaliacoes(produtoId);
+
+    }catch(erro){
+
+        console.log(erro);
+    }
+}
+
+// ========================================
+// CARREGAR AVALIAÇÕES
+// ========================================
+
+async function carregarAvaliacoes(produtoId){
+
+    try{
+
+        // BUSCA NO PHP
+        const resposta = await fetch(
+
+            `../../backend/listar_avaliacoes.php?produto_id=${produtoId}`
+        );
+
+        // CONVERTE
+        const avaliacoes = await resposta.json();
+
+        // PEGA CONTAINER
+        const container = document.getElementById(
+
+            `avaliacoes-${produtoId}`
+        );
+
+        // LIMPA
+        container.innerHTML = "";
+
+        // PERCORRE TODAS
+        avaliacoes.forEach(avaliacao => {
+
+            // ESTRELAS
+            const estrelas = "⭐".repeat(avaliacao.nota);
+
+            // HTML
+            container.innerHTML += `
+
+                <div class="itemAvaliacao">
+
+                    <strong>
+                        ${avaliacao.usuario}
+                    </strong>
+
+                    <p>${estrelas}</p>
+
+                    <p>${avaliacao.comentario}</p>
+
+                    <button
+                        class="btnExcluir"
+
+                        onclick="excluirAvaliacao(
+                            ${avaliacao.id},
+                            ${produtoId}
+                        )"
+                    >
+
+                        Excluir
+
+                    </button>
+
+                </div>
+
+            `;
+        });
+
+    }catch(erro){
+
+        console.log(erro);
+    }
+}
+
+// ========================================
+// EXCLUIR AVALIAÇÃO
+// ========================================
+
+async function excluirAvaliacao(id, produtoId){
+
+    // CONFIRMA
+    const confirmar = confirm(
+
+        "Deseja excluir esta avaliação?"
+    );
+
+    // CANCELA
+    if(!confirmar){
+
+        return;
+    }
+
+    try{
+
+        // ENVIA PARA PHP
+        const resposta = await fetch(
+
+            '../../backend/excluir_avaliacao.php',
+
+            {
+
+                method: 'POST',
+
+                headers: {
+
+                    'Content-Type': 'application/json'
+                },
+
+                body: JSON.stringify({
+
+                    id: id
+
+                })
+
+            }
+        );
+
+        // RESPOSTA
+        const dados = await resposta.json();
+
+        // ALERTA
+        alert(dados.message);
+
+        // RECARREGA
+        carregarAvaliacoes(produtoId);
+
+    }catch(erro){
+
+        console.log(erro);
+    }
+}
+// ========================================
+// MOSTRAR / OCULTAR AVALIAÇÕES
+// ========================================
+
+function toggleAvaliacoes(produtoId){
+
+    // PEGA A DIV
+    const container = document.getElementById(
+
+        `avaliacoes-${produtoId}`
+    );
+
+    // VERIFICA
+    if(container.classList.contains('oculto')){
+
+        // REMOVE OCULTO
+        container.classList.remove('oculto');
+
+    }else{
+
+        // ADICIONA OCULTO
+        container.classList.add('oculto');
+    }
 }
