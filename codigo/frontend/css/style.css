@@ -462,3 +462,145 @@ header {
 
     font-weight: bold;
 }
+/* ======================================== */
+/* ÁREA DAS AVALIAÇÕES */
+/* ======================================== */
+
+.avaliacao{
+
+    margin-top: 15px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+/* SELECT DAS ESTRELAS */
+.nota{
+
+    padding: 10px;
+
+    border-radius: 8px;
+
+    border: 1px solid #ccc;
+
+    cursor: pointer;
+}
+
+/* TEXTAREA DO COMENTÁRIO */
+.comentario{
+
+    resize: none;
+
+    height: 80px;
+
+    padding: 10px;
+
+    border-radius: 10px;
+
+    border: 1px solid #ccc;
+
+    outline: none;
+}
+
+/* BOTÃO AVALIAR */
+.btnAvaliar{
+
+    background: #162938;
+
+    color: white;
+
+    border: none;
+
+    padding: 10px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+/* HOVER DO BOTÃO */
+.btnAvaliar:hover{
+
+    background: #27445c;
+}
+
+/* LISTA DAS AVALIAÇÕES */
+.listaAvaliacoes{
+
+    margin-top: 10px;
+
+    text-align: left;
+}
+
+/* CARD DA AVALIAÇÃO */
+.itemAvaliacao{
+
+    background: #f1f1f1;
+
+    padding: 10px;
+
+    border-radius: 10px;
+
+    margin-top: 10px;
+}
+.itemAvaliacao{
+
+    background: #f1f1f1;
+
+    padding: 10px;
+
+    border-radius: 10px;
+
+    margin-top: 10px;
+}
+
+.btnExcluir{
+
+    margin-top: 10px;
+
+    background: red;
+
+    color: white;
+
+    border: none;
+
+    padding: 8px 15px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+}
+/* ======================================== */
+/* AVALIAÇÕES OCULTAS */
+/* ======================================== */
+
+.oculto{
+
+    display: none;
+}
+
+/* BOTÃO MOSTRAR */
+
+.btnMostrarAvaliacoes{
+
+    margin-top: 10px;
+
+    width: 100%;
+
+    background: #444;
+
+    color: white;
+
+    border: none;
+
+    padding: 10px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+}

@@ -21,3 +21,12 @@ CREATE TABLE produtos(
 
 ALTER TABLE produtos
 ADD categoria VARCHAR(50);
+
+CREATE TABLE avaliacoes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    produto_id INT NOT NULL,
+    usuario VARCHAR(100) NOT NULL,
+    nota INT NOT NULL,
+    comentario TEXT NOT NULL,
+    data_avaliacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
