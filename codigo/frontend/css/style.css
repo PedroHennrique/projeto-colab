@@ -724,3 +724,109 @@ header {
     color: #333;
 
 }
+/* ========================= */
+/* CUPOM */
+/* ========================= */
+
+.cupomContainer{
+
+    width: 90%;
+    max-width: 600px;
+
+    margin: 40px auto;
+
+    background: white;
+
+    padding: 30px;
+
+    border-radius: 20px;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+
+    text-align: center;
+
+}
+
+.cupomContainer h2{
+
+    margin-bottom: 20px;
+
+    color: #111;
+
+}
+
+.areaCupom{
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 15px;
+
+    flex-wrap: wrap;
+
+}
+
+#cupomInput{
+
+    width: 250px;
+
+    padding: 15px;
+
+    border: 2px solid #ddd;
+
+    border-radius: 10px;
+
+    font-size: 16px;
+
+    outline: none;
+
+    transition: 0.3s;
+
+}
+
+#cupomInput:focus{
+
+    border-color: crimson;
+
+}
+
+#btnCupom{
+
+    padding: 15px 25px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: crimson;
+
+    color: white;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+
+}
+
+#btnCupom:hover{
+
+    background: rgb(180, 0, 36);
+
+    transform: scale(1.05);
+
+}
+
+#mensagemCupom{
+
+    margin-top: 20px;
+
+    font-size: 20px;
+
+    font-weight: bold;
+
+}
