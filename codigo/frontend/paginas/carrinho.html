@@ -141,17 +141,114 @@
         <div class="carrinho-container" id="carrinhoContainer"></div>
 
         <button class="btnContinuar" id="btnContinuar">Continuar Comprando</button>
+                    <!-- CUPOM -->
+            <div class="areaCupom">
+
+                <input 
+                    type="text" 
+                    id="cupomInput"
+                    placeholder="Digite seu cupom"
+                >
+
+                <button id="btnCupom">
+                    Aplicar Cupom
+                </button>
+
+            </div>
+
+            <!-- TEXTO DO DESCONTO -->
+            <p id="mensagemCupom"></p>
         <p class="total" id="valorTotal">Total: R$ 0,00</p>
+        <!-- ========================= -->
+<!-- FORMAS DE PAGAMENTO -->
+<!-- ========================= -->
+
+<!-- ========================= -->
+<!-- PAGAMENTO -->
+<!-- ========================= -->
+
+<div class="pagamentoBox">
+
+    <h2>Forma de Pagamento</h2>
+
+    <div class="formasPagamento">
+
+        <label>
+            <input type="radio" name="pagamento" value="pix">
+            PIX
+        </label>
+
+        <label>
+            <input type="radio" name="pagamento" value="cartao">
+            Cartão
+        </label>
+
+        <label>
+            <input type="radio" name="pagamento" value="boleto">
+            Boleto
+        </label>
+
+    </div>
+
+    <!-- CARTÃO -->
+    <div id="dadosCartao" class="boxPagamento">
+
+        <h3>Pagamento com Cartão</h3>
+
+        <input type="text" placeholder="Nome do cartão">
+
+        <input type="text" placeholder="Número do cartão">
+
+        <div class="linhaInputs">
+
+            <input type="text" placeholder="Validade">
+
+            <input type="text" placeholder="CVV">
+
+        </div>
+
+    </div>
+
+    <!-- PIX -->
+    <div id="dadosPix" class="boxPagamento" style="display:none;">
+
+        <h3>Pagamento PIX</h3>
+
+        <p class="textoPagamento">
+            Chave PIX:
+        </p>
+
+        <div class="pixBox">
+            ttraio@pix.com
+        </div>
+
+    </div>
+
+    <!-- BOLETO -->
+    <div id="dadosBoleto" class="boxPagamento" style="display:none;">
+
+        <h3>Pagamento com Boleto</h3>
+
+        <p class="textoPagamento">
+            O boleto será gerado após finalizar a compra.
+        </p>
+
+    </div>
+
+</div>
+
         <button class="btnFinalizar" id="btnFinalizar">Finalizar Compra</button>
     </main>
 
     <script>
         const carrinhoContainer = document.getElementById('carrinhoContainer');
         let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+        let desconto = 0;
 
         function atualizarCarrinho() {
             carrinhoContainer.innerHTML = '';
             let total = 0;
+            
 
             if (carrinho.length === 0) {
                 carrinhoContainer.innerHTML = '<p style="text-align:center;">Seu carrinho está vazio.</p>';
@@ -205,8 +302,34 @@
                     });
                 });
             }
-            document.getElementById('valorTotal').innerText = 'Total: R$ ' + total.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        }
+            // APLICA DESCONTO
+                let valorFinal = total;
+
+                if(desconto > 0){
+
+                    valorFinal = total - (total * desconto / 100);
+
+                }
+
+                // MOSTRA O TOTAL
+             document.getElementById('valorTotal').innerHTML = `
+
+    <p>Subtotal: R$ ${total.toLocaleString('pt-BR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    })}</p>
+
+    <p>Desconto: ${desconto}%</p>
+
+    <h2>
+        Total Final: R$ ${valorFinal.toLocaleString('pt-BR', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        })}
+    </h2>
+
+`;
+   }
 
         atualizarCarrinho();
 
@@ -223,6 +346,110 @@
                 window.location.href = 'checkout.html';
             }
         });
+ 
+// =========================
+// CUPOM DE DESCONTO
+// =========================
+
+document.getElementById('btnCupom').addEventListener('click', () => {
+
+    // PEGA O TEXTO DIGITADO
+    const cupom = document
+        .getElementById('cupomInput')
+        .value
+        .toUpperCase();
+
+    // PEGA A MENSAGEM
+    const mensagem = document.getElementById('mensagemCupom');
+
+    // CUPOM 10%
+    if(cupom === "TTRAIO10"){
+
+        desconto = 10;
+
+        mensagem.innerHTML = `
+            <span style="color:lightgreen;">
+                Cupom de 10% aplicado!
+            </span>
+        `;
+
+    }
+
+    // CUPOM 20%
+    else if(cupom === "TTRAIO20"){
+
+        desconto = 20;
+
+        mensagem.innerHTML = `
+            <span style="color:lightgreen;">
+                Cupom de 20% aplicado!
+            </span>
+        `;
+
+    }
+
+    // CUPOM ERRADO
+    else{
+
+        desconto = 0;
+
+        mensagem.innerHTML = `
+            <span style="color:red;">
+                Cupom inválido!
+            </span>
+        `;
+    }
+
+    // Atualiza valor do carrinho
+    atualizarCarrinho();
+
+});
+// =========================
+// FORMAS DE PAGAMENTO
+// =========================
+
+const radiosPagamento = document.querySelectorAll(
+    'input[name="pagamento"]'
+);
+
+const dadosCartao = document.getElementById('dadosCartao');
+
+const dadosPix = document.getElementById('dadosPix');
+
+const dadosBoleto = document.getElementById('dadosBoleto');
+
+// ALTERAR PAGAMENTO
+radiosPagamento.forEach(radio => {
+
+    radio.addEventListener('change', () => {
+
+        // ESCONDE TODOS
+        dadosCartao.style.display = 'none';
+        dadosPix.style.display = 'none';
+        dadosBoleto.style.display = 'none';
+
+        // MOSTRA O ESCOLHIDO
+        if(radio.value === 'cartao'){
+
+            dadosCartao.style.display = 'block';
+
+        }
+
+        else if(radio.value === 'pix'){
+
+            dadosPix.style.display = 'block';
+
+        }
+
+        else if(radio.value === 'boleto'){
+
+            dadosBoleto.style.display = 'block';
+
+        }
+
+    });
+
+});
     </script>
 
     <script src="../js/script.js"></script>
