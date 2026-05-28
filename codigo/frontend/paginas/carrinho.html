@@ -159,6 +159,84 @@
             <!-- TEXTO DO DESCONTO -->
             <p id="mensagemCupom"></p>
         <p class="total" id="valorTotal">Total: R$ 0,00</p>
+        <!-- ========================= -->
+<!-- FORMAS DE PAGAMENTO -->
+<!-- ========================= -->
+
+<!-- ========================= -->
+<!-- PAGAMENTO -->
+<!-- ========================= -->
+
+<div class="pagamentoBox">
+
+    <h2>Forma de Pagamento</h2>
+
+    <div class="formasPagamento">
+
+        <label>
+            <input type="radio" name="pagamento" value="pix">
+            PIX
+        </label>
+
+        <label>
+            <input type="radio" name="pagamento" value="cartao">
+            Cartão
+        </label>
+
+        <label>
+            <input type="radio" name="pagamento" value="boleto">
+            Boleto
+        </label>
+
+    </div>
+
+    <!-- CARTÃO -->
+    <div id="dadosCartao" class="boxPagamento">
+
+        <h3>Pagamento com Cartão</h3>
+
+        <input type="text" placeholder="Nome do cartão">
+
+        <input type="text" placeholder="Número do cartão">
+
+        <div class="linhaInputs">
+
+            <input type="text" placeholder="Validade">
+
+            <input type="text" placeholder="CVV">
+
+        </div>
+
+    </div>
+
+    <!-- PIX -->
+    <div id="dadosPix" class="boxPagamento" style="display:none;">
+
+        <h3>Pagamento PIX</h3>
+
+        <p class="textoPagamento">
+            Chave PIX:
+        </p>
+
+        <div class="pixBox">
+            ttraio@pix.com
+        </div>
+
+    </div>
+
+    <!-- BOLETO -->
+    <div id="dadosBoleto" class="boxPagamento" style="display:none;">
+
+        <h3>Pagamento com Boleto</h3>
+
+        <p class="textoPagamento">
+            O boleto será gerado após finalizar a compra.
+        </p>
+
+    </div>
+
+</div>
+
         <button class="btnFinalizar" id="btnFinalizar">Finalizar Compra</button>
     </main>
 
@@ -324,6 +402,52 @@ document.getElementById('btnCupom').addEventListener('click', () => {
 
     // Atualiza valor do carrinho
     atualizarCarrinho();
+
+});
+// =========================
+// FORMAS DE PAGAMENTO
+// =========================
+
+const radiosPagamento = document.querySelectorAll(
+    'input[name="pagamento"]'
+);
+
+const dadosCartao = document.getElementById('dadosCartao');
+
+const dadosPix = document.getElementById('dadosPix');
+
+const dadosBoleto = document.getElementById('dadosBoleto');
+
+// ALTERAR PAGAMENTO
+radiosPagamento.forEach(radio => {
+
+    radio.addEventListener('change', () => {
+
+        // ESCONDE TODOS
+        dadosCartao.style.display = 'none';
+        dadosPix.style.display = 'none';
+        dadosBoleto.style.display = 'none';
+
+        // MOSTRA O ESCOLHIDO
+        if(radio.value === 'cartao'){
+
+            dadosCartao.style.display = 'block';
+
+        }
+
+        else if(radio.value === 'pix'){
+
+            dadosPix.style.display = 'block';
+
+        }
+
+        else if(radio.value === 'boleto'){
+
+            dadosBoleto.style.display = 'block';
+
+        }
+
+    });
 
 });
     </script>
