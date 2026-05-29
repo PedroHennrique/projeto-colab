@@ -6,12 +6,13 @@ const resgisterLink = document.querySelectorAll('.registrar'); // pega o link "R
 const alterarLink = document.querySelector('.alterar'); // pega o link "Esqueci a senha/alterar os dados"
 
 //Quando clica no botão Login do menu principal, ele adiciona a classe ativoLogin. Isso faz a janela de Login aparecer na tela.
-btnLoginBarra.addEventListener('click', ()=> {
-    sobressair.classList.add('ativoLogin');}
-); 
+btnLoginBarra.addEventListener('click', () => {
+    sobressair.classList.add('ativoLogin');
+}
+);
 
 //Quando clica no X (fechar), remove a classe ativoLogin. Assim, a janela de login/registro some da tela.
-fecharLogin.addEventListener('click', ()=> {
+fecharLogin.addEventListener('click', () => {
     if (sobressair.classList.contains('ativo') || sobressair.classList.contains('ativot')) {
         sobressair.classList.remove('ativoLogin', 'ativo', 'ativot');
     } else {
@@ -21,25 +22,26 @@ fecharLogin.addEventListener('click', ()=> {
 
 //Quando clica em "Registrar-se", adiciona a classe ativo. No CSS, isso vai trocar a tela de Login para a tela de Registro.
 resgisterLink.forEach(link => { // forEach percorre a lista e aplica o mesmo evento em cada link.
-    link.addEventListener('click', ()=> {
+    link.addEventListener('click', () => {
         if (sobressair.classList.contains('ativot')) {
             sobressair.classList.remove('ativot'),
-            sobressair.classList.add('ativo');
+                sobressair.classList.add('ativo');
         } else {
-            sobressair.classList.add('ativo');}
-    }); 
+            sobressair.classList.add('ativo');
+        }
+    });
 });
 
 //Quando clica em "Forgot Password", adiciona a classe ativo. No CSS, isso vai trocar a tela de Login para a tela de Registro.
-alterarLink.addEventListener('click', ()=> {
+alterarLink.addEventListener('click', () => {
     sobressair.classList.add('ativot');
 });
 
 //Quando clica em "Login" (dentro da tela de Registro e Esqueci Senha), ele remove a classe ativo e atvot. Assim, volta para a tela de Login.
-formsLogin.forEach(link => { 
-    link.addEventListener('click', ()=> {
+formsLogin.forEach(link => {
+    link.addEventListener('click', () => {
         sobressair.classList.remove('ativo', 'ativot');
-    }); 
+    });
 });
 
 // --- Conectar com PHP ---
@@ -54,13 +56,13 @@ registerForm.addEventListener('submit', (e) => {
     const tipo = document.getElementById('tipoUsuario').value;
 
     fetch('../../backend/registro.php', {
-        method: 'POST', 
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, email, password, tipo })
     })
-    .then(res => res.text())
-    .then(data => alert(data))
-    .catch(err => alert('Erro: ' + err));
+        .then(res => res.text())
+        .then(data => alert(data))
+        .catch(err => alert('Erro: ' + err));
 });
 
 // Login
@@ -76,29 +78,30 @@ loginForm.addEventListener('submit', (e) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
     })
-    .then(res => res.json())
-    .then(data => {
-        if (data.status === "success") {
-            // Salva no localStorage
-            localStorage.setItem('usuarioLogado', data.username);
-            localStorage.setItem('tipoUsuario', data.tipo);
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === "success") {
+                // Salva no localStorage
+                localStorage.setItem('usuarioLogado', data.username);
+                localStorage.setItem('tipoUsuario', data.tipo);
 
-            // Atualiza interface
-            mostrarUsuarioLogado();
+                // Atualiza interface
+                mostrarUsuarioLogado();
 
-            alert(`Bem-vindo, ${data.username}!`);
-            sobressair.classList.remove('ativoLogin', 'ativo', 'ativot');
-        } else {
-            alert(data.message);
-        }
-    })
-    .catch(err => alert('Erro: ' + err));
+                alert(`Bem-vindo, ${data.username}!`);
+                sobressair.classList.remove('ativoLogin', 'ativo', 'ativot');
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(err => alert('Erro: ' + err));
 });
 
 // Recuperar senha
 const recuperarForm = document.querySelector('.formsAlteracao form');
 
-recuperarForm.addEventListener('submit', (e) => {    e.preventDefault();
+recuperarForm.addEventListener('submit', (e) => {
+    e.preventDefault();
     const username = recuperarForm.querySelector('input[type="text"]').value;
     const email = recuperarForm.querySelector('input[type="email"]').value;
 
@@ -112,28 +115,28 @@ recuperarForm.addEventListener('submit', (e) => {    e.preventDefault();
             email
         })
     })
-    .then(res => res.json())
-    .then(data => {
-        const mensagem = document.querySelector('.mensagem-recuperacao');
-        mensagem.style.display = 'block';
-        if(data.status === "success") {
-            mensagem.innerHTML = `
+        .then(res => res.json())
+        .then(data => {
+            const mensagem = document.querySelector('.mensagem-recuperacao');
+            mensagem.style.display = 'block';
+            if (data.status === "success") {
+                mensagem.innerHTML = `
                 <p style="color: lightgreen;">
                     Sua senha é: <strong>${data.password}</strong>
                 </p>
             `;
-        } else {
-            mensagem.innerHTML = `
+            } else {
+                mensagem.innerHTML = `
                 <p style="color: red;">
                     ${data.message}
                 </p>
             `;
-        }
-    })
-    .catch(err => {
-        alert("Erro ao recuperar senha");
-        console.log(err);
-    });
+            }
+        })
+        .catch(err => {
+            alert("Erro ao recuperar senha");
+            console.log(err);
+        });
 });
 
 // Log-out
@@ -151,7 +154,7 @@ function mostrarUsuarioLogado() {
     const btnVendedor = document.querySelector('.btnVendedor');
 
     // Esconde botão vendedor inicialmente
-    if(btnVendedor){
+    if (btnVendedor) {
         btnVendedor.style.display = 'none';
     }
     if (usuario) {
@@ -161,7 +164,7 @@ function mostrarUsuarioLogado() {
 
         // MOSTRA SOMENTE SE FOR VENDEDOR
         if (tipo === 'vendedor') {
-            if(btnVendedor){
+            if (btnVendedor) {
                 btnVendedor.style.display = 'inline-block';
             }
         }
@@ -232,7 +235,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (btnFinalizar) {
         btnFinalizar.addEventListener("click", () => {
             const carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
-            
+
             // Se o carrinho estiver vazio, mostra alerta
             if (carrinho.length === 0) {
                 alert("Seu carrinho está vazio!");
@@ -245,7 +248,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!usuarioLogado) {
                 // Usuário não logado → avisa e redireciona
                 alert("Você precisa estar logado para finalizar a compra!");
-                window.location.href = "carrinho.html"; 
+                window.location.href = "carrinho.html";
                 return;
             }
 
@@ -343,13 +346,13 @@ function renderizarProdutos() {
     }
 
     // AVALIAÇÃO 
-    
-   // PERCORRE TODOS OS PRODUTOS
-   
-lista.forEach(produto => {
 
-    // CRIA O CARD DO PRODUTO
-    container.innerHTML += `
+    // PERCORRE TODOS OS PRODUTOS
+
+    lista.forEach(produto => {
+
+        // CRIA O CARD DO PRODUTO
+        container.innerHTML += `
 
         <div class="card">
 
@@ -421,7 +424,19 @@ lista.forEach(produto => {
                 </div>
 
             </div>
+            
+            <!-- BOTÃO FAVORITAR -->
+            <button
 
+                class="btnWishlist"
+
+                onclick='adicionarWishlist(${JSON.stringify(produto)})'
+            >
+
+                Favoritar
+
+            </button>
+            
             <!-- BOTÃO COMPRAR -->
             <button 
 
@@ -441,20 +456,20 @@ lista.forEach(produto => {
         </div>
     `;
 
-    // CARREGA AS AVALIAÇÕES AUTOMATICAMENTE
-    setTimeout(() => {
+        // CARREGA AS AVALIAÇÕES AUTOMATICAMENTE
+        setTimeout(() => {
 
-        carregarAvaliacoes(produto.id);
+            carregarAvaliacoes(produto.id);
 
-    }, 100);
+        }, 100);
 
-});
+    });
 }
 // ========================================
 // ENVIAR AVALIAÇÃO
 // ========================================
 
-async function enviarAvaliacao(produtoId, botao){
+async function enviarAvaliacao(produtoId, botao) {
 
     // PEGA O CARD
     const card = botao.parentElement;
@@ -469,14 +484,14 @@ async function enviarAvaliacao(produtoId, botao){
     const usuario = localStorage.getItem('usuarioLogado');
 
     // VERIFICA LOGIN
-    if(!usuario){
+    if (!usuario) {
 
         alert("Você precisa estar logado!");
 
         return;
     }
 
-    try{
+    try {
 
         // ENVIA PARA O PHP
         const resposta = await fetch(
@@ -519,7 +534,7 @@ async function enviarAvaliacao(produtoId, botao){
         // RECARREGA
         carregarAvaliacoes(produtoId);
 
-    }catch(erro){
+    } catch (erro) {
 
         console.log(erro);
     }
@@ -529,9 +544,9 @@ async function enviarAvaliacao(produtoId, botao){
 // CARREGAR AVALIAÇÕES
 // ========================================
 
-async function carregarAvaliacoes(produtoId){
+async function carregarAvaliacoes(produtoId) {
 
-    try{
+    try {
 
         // BUSCA NO PHP
         const resposta = await fetch(
@@ -588,7 +603,7 @@ async function carregarAvaliacoes(produtoId){
             `;
         });
 
-    }catch(erro){
+    } catch (erro) {
 
         console.log(erro);
     }
@@ -598,7 +613,7 @@ async function carregarAvaliacoes(produtoId){
 // EXCLUIR AVALIAÇÃO
 // ========================================
 
-async function excluirAvaliacao(id, produtoId){
+async function excluirAvaliacao(id, produtoId) {
 
     // CONFIRMA
     const confirmar = confirm(
@@ -607,12 +622,12 @@ async function excluirAvaliacao(id, produtoId){
     );
 
     // CANCELA
-    if(!confirmar){
+    if (!confirmar) {
 
         return;
     }
 
-    try{
+    try {
 
         // ENVIA PARA PHP
         const resposta = await fetch(
@@ -646,7 +661,7 @@ async function excluirAvaliacao(id, produtoId){
         // RECARREGA
         carregarAvaliacoes(produtoId);
 
-    }catch(erro){
+    } catch (erro) {
 
         console.log(erro);
     }
@@ -655,7 +670,7 @@ async function excluirAvaliacao(id, produtoId){
 // MOSTRAR / OCULTAR AVALIAÇÕES
 // ========================================
 
-function toggleAvaliacoes(produtoId){
+function toggleAvaliacoes(produtoId) {
 
     // PEGA A DIV
     const container = document.getElementById(
@@ -664,14 +679,179 @@ function toggleAvaliacoes(produtoId){
     );
 
     // VERIFICA
-    if(container.classList.contains('oculto')){
+    if (container.classList.contains('oculto')) {
 
         // REMOVE OCULTO
         container.classList.remove('oculto');
 
-    }else{
+    } else {
 
         // ADICIONA OCULTO
         container.classList.add('oculto');
     }
+}
+
+
+// ========================================
+// WISHLIST
+// ========================================
+
+// ADICIONAR À WISHLIST
+function adicionarWishlist(produto) {
+
+    // PEGA WISHLIST
+    let wishlist = JSON.parse(
+
+        localStorage.getItem('wishlist')
+
+    ) || [];
+
+    // VERIFICA SE JÁ EXISTE
+    const existe = wishlist.find(
+
+        item => item.id == produto.id
+    );
+
+    // SE NÃO EXISTIR
+    if (!existe) {
+
+        // ADICIONA
+        wishlist.push(produto);
+
+        // SALVA
+        localStorage.setItem(
+
+            'wishlist',
+
+            JSON.stringify(wishlist)
+        );
+
+        alert(
+
+            'Produto adicionado à wishlist!'
+        );
+
+    } else {
+
+        alert(
+
+            'Produto já está na wishlist!'
+        );
+    }
+}
+
+// CARREGAR WISHLIST
+function carregarWishlist() {
+
+    // PEGA CONTAINER
+    const container = document.getElementById(
+
+        'wishlist-container'
+    );
+
+    // SE NÃO EXISTIR, PARA
+    if (!container) {
+
+        return;
+    }
+
+    // PEGA WISHLIST
+    let wishlist = JSON.parse(
+
+        localStorage.getItem('wishlist')
+
+    ) || [];
+
+    // WISHLIST VAZIA
+    if (wishlist.length === 0) {
+
+        container.innerHTML = `
+
+            <h2>
+
+                Sua lista está vazia.
+
+            </h2>
+
+        `;
+
+        return;
+    }
+
+    // PERCORRE PRODUTOS
+    wishlist.forEach(produto => {
+
+        container.innerHTML += `
+
+    <div class="card">
+
+        <img
+            src="${produto.imagem}"
+
+            alt="${produto.nome}"
+        >
+
+        <h3>
+
+            ${produto.nome}
+
+        </h3>
+
+        <p>
+
+            R$ ${produto.preco}
+
+        </p>
+
+        <button
+
+            class="btnRemoverWishlist"
+
+            onclick="removerWishlist(${produto.id})"
+        >
+
+            Remover
+
+        </button>
+
+    </div>
+
+`;
+    });
+}
+
+// EXECUTA AO ABRIR A PÁGINA
+window.addEventListener(
+
+    'DOMContentLoaded',
+
+    carregarWishlist
+);
+
+// REMOVER PRODUTO DA WISHLIST
+function removerWishlist(id) {
+
+    // PEGA WISHLIST
+    let wishlist = JSON.parse(
+
+        localStorage.getItem('wishlist')
+
+    ) || [];
+
+    // REMOVE PRODUTO
+    wishlist = wishlist.filter(
+
+        produto => produto.id != id
+    );
+
+    // SALVA NOVAMENTE
+    localStorage.setItem(
+
+        'wishlist',
+
+        JSON.stringify(wishlist)
+    );
+
+    // RECARREGA PÁGINA
+    location.reload();
 }

@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Lista de Desejos</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header>
+
+        <h2 class="logo">TTRAIO Web</h2>
+
+        <nav class="navigation">
+
+            <a href="index.html">Inicio</a>
+
+            <a href="sobre.html">Sobre</a>
+
+            <a href="produto.html">Produtos</a>
+
+            <a href="wishlist.html">Lista de Desejos</a>
+
+            <a href="contatos.html">Contatos</a>
+
+            <a href="carrinho.html" class="btnCarrinho">
+
+                <ion-icon name="cart-outline"></ion-icon>
+
+                <span id="qtdCarrinho">0</span>
+
+            </a>
+
+            <a href="vendedor.html" class="btnVendedor" style="display:none;">
+
+                Painel Vendedor
+
+            </a>
+
+            <button class="btnLogin">
+
+                Login
+
+            </button>
+
+        </nav>
+
+        <div class="usuarioLogado" style="display: none;">
+
+            <ion-icon
+                name="person-circle-outline"
+                class="iconeUsuario"
+            ></ion-icon>
+
+            <span id="nomeUsuario"></span>
+
+            <button
+                class="btnUsuario"
+                onclick="logout()"
+            >
+
+                Sair
+
+            </button>
+
+        </div>
+
+    </header>
+
+    <!-- LOGIN -->
+    <div class="sobressair">
+
+        <span class="fechar">
+
+            <ion-icon name="close"></ion-icon>
+
+        </span>
+
+        <!-- LOGIN -->
+        <div class="formsLogin">
+
+            <h2>Login</h2>
+
+            <form action="#">
+
+                <div class="input-box">
+
+                    <span class="icone">
+
+                        <ion-icon name="mail"></ion-icon>
+
+                    </span>
+
+                    <input type="email" required>
+
+                    <label>Email</label>
+
+                </div>
+
+                <div class="input-box">
+
+                    <span class="icone">
+
+                        <ion-icon name="lock-closed"></ion-icon>
+
+                    </span>
+
+                    <input type="password" required>
+
+                    <label>Password</label>
+
+                </div>
+
+                <div class="esqueciSenha">
+
+                    <label>
+
+                        <input type="checkbox">
+
+                        Remember me
+
+                    </label>
+
+                    <a href="#" class="alterar">
+
+                        Forgot Password
+
+                    </a>
+
+                </div>
+
+                <button type="submit" class="btn">
+
+                    Login
+
+                </button>
+
+                <div class="loginRegister">
+
+                    <p>
+
+                        Não há conta?
+
+                        <a href="#" class="registrar">
+
+                            Register
+
+                        </a>
+
+                    </p>
+
+                </div>
+
+            </form>
+
+        </div>
+
+        <!-- REGISTER -->
+        <div class="formsRegister">
+
+            <h2>Registrar-se</h2>
+
+            <form action="#">
+
+                <div class="input-box">
+
+                    <span class="icone">
+
+                        <ion-icon name="person"></ion-icon>
+
+                    </span>
+
+                    <input type="text" required>
+
+                    <label>Username</label>
+
+                </div>
+
+                <div class="input-box">
+
+                    <span class="icone">
+
+                        <ion-icon name="mail"></ion-icon>
+
+                    </span>
+
+                    <input type="email" required>
+
+                    <label>Email</label>
+
+                </div>
+
+                <div class="input-box">
+
+                    <span class="icone">
+
+                        <ion-icon name="lock-closed"></ion-icon>
+
+                    </span>
+
+                    <input type="password" required>
+
+                    <label>Password</label>
+
+                </div>
+
+                <div class="input-box">
+
+                    <select id="tipoUsuario" required>
+
+                        <option value="">Selecione o tipo</option>
+
+                        <option value="cliente">Cliente</option>
+
+                        <option value="vendedor">Vendedor</option>
+
+                    </select>
+
+                </div>
+
+                <div class="termosCondicoes">
+
+                    <label>
+
+                        <input type="checkbox">
+
+                        I agree to the terms & conditions
+
+                    </label>
+
+                </div>
+
+                <button type="submit" class="btn">
+
+                    Registrar-se
+
+                </button>
+
+                <div class="loginTela">
+
+                    <p>
+
+                        Já possui uma conta?
+
+                        <a href="#" class="telaLogin">
+
+                            Login
+
+                        </a>
+
+                    </p>
+
+                </div>
+
+            </form>
+
+        </div>
+
+        <!-- ALTERAÇÃO -->
+        <div class="formsAlteracao">
+
+            <h2>Verificar Dados</h2>
+
+            <form action="#">
+
+                <div class="input-box">
+
+                    <span class="icone">
+
+                        <ion-icon name="person"></ion-icon>
+
+                    </span>
+
+                    <input type="text" required>
+
+                    <label>
+
+                        Qual é o seu Username?
+
+                    </label>
+
+                </div>
+
+                <div class="input-box">
+
+                    <span class="icone">
+
+                        <ion-icon name="mail"></ion-icon>
+
+                    </span>
+
+                    <input type="email" required>
+
+                    <label>
+
+                        Qual é o seu E-mail?
+
+                    </label>
+
+                </div>
+
+                <button type="submit" class="btn">
+
+                    Verificar Senha
+
+                </button>
+
+                <div
+                    class="mensagem-recuperacao"
+                    style="display:none;"
+                ></div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- CONTEÚDO -->
+    <main>
+
+        <h1
+            style="
+                text-align:center;
+                color:white;
+                margin-top:140px;
+                margin-bottom:40px;
+            "
+        >
+
+            Lista de Desejos
+
+        </h1>
+
+        <div
+            class="produtos-container"
+            id="wishlist-container"
+        ></div>
+
+    </main>
+
+    <!-- SCRIPT -->
+    <script src="../js/script.js"></script>
+
+    <!-- ICONS -->
+    <script
+        type="module"
+        src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+    ></script>
+
+    <script
+        nomodule
+        src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+    ></script>
+
+</body>
+
+</html>
